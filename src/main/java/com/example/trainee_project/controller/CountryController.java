@@ -3,8 +3,10 @@ package com.example.trainee_project.controller;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
@@ -21,8 +23,6 @@ public class CountryController {
 
         ResponseEntity<CountryResponse> responseEntity = null;
 
-        // responseEntity = restTemplate.exchange(url, HttpMethod.GET, null,
-        // CountryResponse.class);
         responseEntity = restTemplate.getForEntity(url, CountryResponse.class);
 
         CountryResponse countryResponse = responseEntity.getBody();
@@ -45,6 +45,13 @@ public class CountryController {
 
         return countryDetailResponses;
 
+    }
+
+    @GetMapping("/{name}")
+    public ResponseEntity<CountryDetailsResponse> getAllCountrByName(@PathVariable("name") String name) {
+        Finder finder = new Finder();
+        CountryDetailsResponse countryResponse = finder.findCountryDetailsByName(name);
+        return new ResponseEntity<CountryDetailsResponse>(countryResponse, HttpStatus.OK);
     }
 
 }
